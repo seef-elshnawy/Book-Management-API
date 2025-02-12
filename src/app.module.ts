@@ -6,12 +6,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { databaseConfig } from './config/database/postgres.config';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 import { DataSource } from 'typeorm';
+import { UserModule } from './user/user.module';
 @Module({
   imports: [
     BooksModule,
     TypeOrmModule.forRootAsync({
       useFactory: () => databaseConfig,
     }),
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
