@@ -18,12 +18,13 @@ $ npm run start:prod
 
 ```
 
-## endpoint
+## Header for all endpoint:
 
-## Header for all endpoint: headers: {
-
+headers{
 'Content-Type': 'application/x-www-form-urlencoded'
 }
+
+## Endpoints
 
 POST localhost:8000/api/signup --> Body {
 'firstName': '',
@@ -47,7 +48,8 @@ PUT localhost:8000/api/refresh-token --> Body {
 'sessionId': ''
 }
 
-## with this endpoints we need to use Authorization type Bearer Token  
+## with this endpoints we need to use Authorization type Bearer Token
+
 POST localhost:8000/api/books --> Body {
 'title': '',
 'author': '',
@@ -69,6 +71,7 @@ GET localhost:8000/api/books/:id
 ```
 
 ## Some configrations
+
 in this application I used some important configrations like
 1- brevo: for sending emails
 2- docker: for create container for redis caching and create another container for postgres database
