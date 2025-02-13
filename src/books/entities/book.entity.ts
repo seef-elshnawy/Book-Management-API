@@ -1,6 +1,6 @@
 import { BaseModel } from 'src/libs/database/base.model';
 import { User } from 'src/user/entities/user.entity';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity()
 export class Book extends BaseModel {
@@ -23,5 +23,6 @@ export class Book extends BaseModel {
   user: User;
 
   @Column()
+  @JoinColumn()
   userId: string;
 }
