@@ -72,10 +72,6 @@ GET localhost:8000/api/books/:id
 
 DELETE localhost:8000/api/books/:id
 
-```
-
-```
-
 ## Some configrations
 
 in this application I used some important configrations like
@@ -84,4 +80,4 @@ in this application I used some important configrations like
 
 ## It's very important to enable emails to receive otp
 
-## without cahing the emails are will never send
+## without caching the emails are will never send
