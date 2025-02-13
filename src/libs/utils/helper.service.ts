@@ -3,6 +3,8 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
+import { ResponseData } from '../types/response';
+import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
 
 @Injectable()
 export class helperService {
@@ -61,6 +63,19 @@ export class helperService {
       secret,
     });
   }
+
+  handleResponseData<T>(
+    data: T,
+    code?: number,
+    message?: string,
+  ): ResponseData<typeof data> {
+    return {
+      code: code ? code : 200,
+      data,
+      message: message ? message : 'successfull',
+    };
+  }
+
   getHtml(otpCode: string) {
     const style = `
     h1 {

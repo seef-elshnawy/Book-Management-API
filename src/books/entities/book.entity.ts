@@ -15,14 +15,4 @@ export class Book extends BaseModel {
 
   @Column()
   NumberOfPages: number;
-
-  @ManyToOne(() => User, (user) => user.books, {
-    onDelete: 'SET NULL',
-    onUpdate: 'SET NULL',
-  })
-  user: User;
-
-  @Column()
-  @JoinColumn()
-  userId: string;
 }

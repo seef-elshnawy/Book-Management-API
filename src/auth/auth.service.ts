@@ -10,6 +10,7 @@ import { UserAccountState } from 'src/user/enums/user.enum';
 import { validateAccountDto } from './dto/validate.dto';
 import { Session } from './entities/auth.entity';
 import { User } from 'src/user/entities/user.entity';
+import { ResponseData } from 'src/libs/types/response';
 
 @Injectable()
 export class AuthService {
@@ -23,7 +24,7 @@ export class AuthService {
     private sessionRepo: Repository<Session>,
   ) {}
 
-  async signUp(signUpDto: signUpDto) {
+  async signUp(signUpDto: signUpDto): Promise<ResponseData<String>> {
     try {
       const hashPassword = await this.helperService.hashPassword(
         signUpDto.password,
@@ -40,13 +41,16 @@ export class AuthService {
       });
       await this.otpRepository.save(otp);
       await this.sendEmailVerificationCode(user.email, otpCode);
-      return 'otp is send to your email';
+      const data = 'otp is send to your email';
+      return this.helperService.handleResponseData(data);
     } catch (err) {
       throw err;
     }
   }
 
-  async validateAccount(validateDto: validateAccountDto) {
+  async validateAccount(
+    validateDto: validateAccountDto,
+  ): Promise<ResponseData<String>> {
     const otp = await this.otpRepository.findOne({
       where: { otp: validateDto.otpCode },
     });
@@ -59,7 +63,8 @@ export class AuthService {
       accountState: UserAccountState.ACTIVE,
     });
     await this.otpRepository.update(otp.id, { used: true });
-    return 'Your Account validate sucessfully';
+    const data = 'Your Account validate sucessfully';
+    return this.helperService.handleResponseData(data);
   }
 
   async validateUser(signInDto: signInWithEmail) {
@@ -75,7 +80,7 @@ export class AuthService {
     return user;
   }
 
-  async signIn(user: User) {
+  async signIn(user: User): Promise<ResponseData<{ access_token: string }>> {
     const { access_token } = await this.helperService.signToken(user.id);
     const { refresh_token } = await this.helperService.generateRefreshToken(
       user.id,
@@ -87,10 +92,12 @@ export class AuthService {
     });
     await this.sessionRepo.save(session);
     await this.userService.update(user.id, { sessionId: session.id });
-    return { access_token };
+    return this.helperService.handleResponseData({ access_token });
   }
 
-  async refreshtoken(sessionId: string): Promise<{ access_token: string }> {
+  async refreshtoken(
+    sessionId: string,
+  ): Promise<ResponseData<{ access_token: string }>> {
     const session = await this.sessionRepo.findOne({
       where: { id: sessionId },
     });
@@ -104,10 +111,16 @@ export class AuthService {
       dataDecoded.userId,
     );
     this.sessionRepo.update(session.id, { refreshToken: refresh_token });
-    return newToken;
+    return this.helperService.handleResponseData(newToken);
   }
 
   async sendEmailVerificationCode(email: string, otpCode: string) {
     await this.mailService.send({ to: email, otpCode });
+  }
+
+  async signOut(sessionId: string): Promise<ResponseData<String>> {
+    await this.sessionRepo.delete(sessionId);
+    const data = 'logout sucessfull';
+    return this.helperService.handleResponseData(data);
   }
 }

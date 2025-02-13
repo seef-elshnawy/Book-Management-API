@@ -1,19 +1,9 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-  Req,
-} from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Req, Put } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { signUpDto, signInWithEmail } from './dto/auth.dto';
 import { validateAccountDto } from './dto/validate.dto';
 import { AuthGuard } from '@nestjs/passport';
-@Controller()
+@Controller('api')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -28,13 +18,18 @@ export class AuthController {
     return await this.authService.signIn(req.user);
   }
 
+  @Post('signout')
+  async signOut(@Body() data: { sessionId: string }) {
+    return await this.authService.signOut(data.sessionId);
+  }
+
   @Post('validate-account')
   async validateAccount(@Body() validateDto: validateAccountDto) {
     return await this.authService.validateAccount(validateDto);
   }
 
-  @Post('refresh-token')
-  async refreshToken(@Body() data:{sessionId: string}){
-    return await this.authService.refreshtoken(data.sessionId)
+  @Put('refresh-token')
+  async refreshToken(@Body() data: { sessionId: string }) {
+    return await this.authService.refreshtoken(data.sessionId);
   }
 }

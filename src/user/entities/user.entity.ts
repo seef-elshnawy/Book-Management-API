@@ -23,12 +23,6 @@ export class User extends BaseModel {
   @Column({ enum: UserAccountState, default: UserAccountState.INACTIVE })
   accountState: UserAccountState;
 
-  @OneToMany(() => Book, (book) => book.user, {
-    onDelete: 'SET NULL',
-    onUpdate: 'SET NULL',
-  })
-  books: Book[];
-
   @OneToOne(() => Session, (session) => session.user, {
     onDelete: 'SET NULL',
     onUpdate: 'SET NULL',
