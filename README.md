@@ -18,7 +18,7 @@ $ npm run start:prod
 
 ```
 
-## Header for all endpoint:
+## Header for all endpoints:
 
 headers{
 'Content-Type': 'application/x-www-form-urlencoded'
@@ -48,6 +48,10 @@ PUT localhost:8000/api/refresh-token --> Body {
 'sessionId': ''
 }
 
+POST localhost:8000/api/signout --> Body {
+'sessionId': ''
+}
+
 ## with this endpoints we need to use Authorization type Bearer Token
 
 POST localhost:8000/api/books --> Body {
@@ -65,6 +69,8 @@ PUT localhost:8000/api/books/:id --> (include fields that need to be updated) Bo
 }
 
 GET localhost:8000/api/books/:id
+
+DELETE localhost:8000/api/books/:id
 
 ```
 
